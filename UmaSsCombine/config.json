@@ -1,0 +1,14 @@
+{
+  "boundaryYPosHeightRatio": 0.7,
+  "boundaryYPosHeightThresh": 250,
+  "boundaryXPosHeightRatio": 0.7,
+  "boundaryXPosLeftRatio": 0.1,
+  "boundaryXPosLeftThresh": 240,
+  "boundaryXPosRightRatio": 0.975,
+  "boundaryXPosRightThresh": 240,
+  "boundaryXPosRightGrayThresh": 215,
+  "searchHeightRatio": 0.04,
+  "minTemplateMatchScore": 0.5,
+  "sortTarget": "fileName",
+  "sortOrder": "ascending"
+}
