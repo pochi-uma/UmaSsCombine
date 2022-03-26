@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "UmaSsCombine": {
-      "commandName": "Project",
-      "commandLineArgs": "D:\\Documents\\Game\\UmamusumeData\\ScreenShot\\test\\1.png D:\\Documents\\Game\\UmamusumeData\\ScreenShot\\test\\2.png D:\\Documents\\Game\\UmamusumeData\\ScreenShot\\test\\3.png D:\\Documents\\Game\\UmamusumeData\\ScreenShot\\test\\4.png"
-    }
-  }
-}
