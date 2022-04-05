@@ -7,12 +7,14 @@ namespace UmaSsCombine
 {
 	internal class Config
 	{
-		public double BoundaryYPosHeightRatio { get; set; } = 0.7d;
-		public int BoundaryYPosHeightThresh { get; set; } = 250;
+		public double BoundaryYPosHeightRatio { get; set; } = 0.65d;
+		public int BoundaryYPosHeightThresh { get; set; } = 247;
 		public double BoundaryXPosHeightRatio { get; set; } = 0.7d;
-		public double BoundaryXPosLeftRatio { get; set; } = 0.1d;
-		public int BoundaryXPosLeftThresh { get; set; } = 240;
-		public double BoundaryXPosRightRatio { get; set; } = 0.975d;
+		public double BoundaryXPosLeftRatio { get; set; } = 0.03d;
+		public int BoundaryXPosLeftMinThresh { get; set; } = 240;
+		public int BoundaryXPosLeftMaxThresh { get; set; } = 250;
+		public int BoundaryXPosLeftMargin { get; set; } = 9;
+		public double BoundaryXPosLeftFindCountRatio { get; set; } = 0.01d;
 		public int BoundaryXPosRightThresh { get; set; } = 240;
 		public int BoundaryXPosRightGrayThresh { get; set; } = 215;
 		public double SearchHeightRatio { get; set; } = 0.04d;

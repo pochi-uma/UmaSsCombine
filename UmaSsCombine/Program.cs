@@ -52,12 +52,14 @@ namespace UmaSsCombine
 				var width = mats[0].Width;
 				var height = mats.Sum(p => p.Height);
 				(int left, int right) = getBoundaryXPos(mats[0]);
+				Debug.WriteLine($"Left:{left} Right:{right}");
 				if(width <= 0 || height <= 0 || left <= 0 || right <= 0) {
 					writeErrMsg(outputDir, $"境界の取得に失敗しました{Environment.NewLine}幅:{width} 高さ:{height} 左:{left} 右:{right}");
 					return;
 				}
 				using Mat retMat = new Mat(new Size(width, height), mats[0].Type());
 				int boundaryY = getBoundaryYPos(mats[0], left);
+				Debug.WriteLine($"0 Bottom:{boundaryY}");
 				if(boundaryY <= 0) {
 					writeErrMsg(outputDir, $"1番目の画像の境界(下)の取得に失敗しました");
 					return;
@@ -65,6 +67,7 @@ namespace UmaSsCombine
 				retMat[0, boundaryY, 0, width] = mats[0].Clone(new Rect(0, 0, width, boundaryY));
 				int totalY = boundaryY;
 				int searchHeight = (int)(mats[0].Height * config.SearchHeightRatio);
+				Debug.WriteLine($"SearchHeight:{searchHeight}");
 				for(int i = 1; i < mats.Length; i++) {
 					var ret = TemplateMatch.Search(mats[i], retMat.Clone(new Rect(left, totalY - searchHeight, right - left, searchHeight)),
 						new Rect(left, 0, right - left, mats[i].Height), config.MinTemplateMatchScore);
@@ -78,13 +81,19 @@ namespace UmaSsCombine
 					}
 					Debug.WriteLine($"{ret.MatchScore} {ret.Rect.X}:{ret.Rect.Y}");
 					boundaryY = getBoundaryYPos(mats[i], left);
+					Debug.WriteLine($"{i} Bottom:{boundaryY}");
 					if(boundaryY <= 0) {
 						writeErrMsg(outputDir, $"{i + 1}番目の画像の境界(下)の取得に失敗しました");
+						return;
+					}
+					else if(boundaryY < ret.Rect.Y + searchHeight) {
+						writeErrMsg(outputDir, $"{i}番目と{i + 1}番目の画像の一致箇所が見つかりませんでした");
 						return;
 					}
 					retMat[totalY, totalY + boundaryY - ret.Rect.Y + searchHeight, 0, width] =
 						mats[i].Clone(new Rect(0, ret.Rect.Y + searchHeight, width, boundaryY - ret.Rect.Y + searchHeight));
 					totalY += boundaryY - searchHeight - ret.Rect.Y;
+					Debug.WriteLine($"TotalY:{totalY}");
 				}
 
 				var filePath = Path.Combine(outputDir, $"{DateTime.Now:yyyyMMddHHmmssfff}.png");
@@ -134,6 +143,7 @@ namespace UmaSsCombine
 			unsafe {
 				byte* b = copy.DataPointer;
 				for(int y = (int)(m.Height * config.BoundaryYPosHeightRatio); y < m.Height; y++) {
+					Debug.WriteLine($"YPos {x}:{y} {b[y * m.Width + x]}");
 					if(b[y * m.Width + x] > config.BoundaryYPosHeightThresh) {
 						return y;
 					}
@@ -150,16 +160,29 @@ namespace UmaSsCombine
 			unsafe {
 				byte* b = copy.DataPointer;
 				int y = (int)(m.Height * config.BoundaryXPosHeightRatio);
-				for(int x = (int)(m.Width * config.BoundaryXPosLeftRatio); x < m.Width * 0.5; x++) {
-					if(b[y * m.Width + x] > config.BoundaryXPosLeftThresh) {
-						left = x - 1;
-						break;
+				int leftFindCount = 0;
+				int leftFindCountThresh = (int)(m.Width * config.BoundaryXPosLeftFindCountRatio);
+				for(int x = (int)Math.Max(config.BoundaryXPosLeftMargin, m.Width * config.BoundaryXPosLeftRatio); x < m.Width * 0.5; x++) {
+					Debug.WriteLine($"XLeftPos {x}:{y} {b[y * m.Width + x]}");
+					if(b[y * m.Width + x] > config.BoundaryXPosLeftMinThresh && b[y * m.Width + x] < config.BoundaryXPosLeftMaxThresh) {
+						if(++leftFindCount >= leftFindCountThresh) {
+							left = x;
+							break;
+						}
 					}
+					else {
+						leftFindCount = 0;
+					}
+				}
+				if(left == -1) {
+					return (-1, -1);
 				}
 
 				bool findDarkGray = false;
-				for(int x = (int)(m.Width * config.BoundaryXPosRightRatio); x >= m.Width * 0.5; x--) {
+				for(int x = Math.Min(m.Width - 1, m.Width - left + leftFindCountThresh); x >= m.Width * 0.5; x--) {
+					Debug.WriteLine($"XRightPos {x}:{y} {b[y * m.Width + x]}");
 					if(b[y * m.Width + x] < config.BoundaryXPosRightGrayThresh && !findDarkGray) {
+						Debug.WriteLine($"Find gray {x}:{y}");
 						findDarkGray = true;
 					}
 					if(findDarkGray && b[y * m.Width + x] > config.BoundaryXPosRightThresh) {
