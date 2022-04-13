@@ -22,7 +22,7 @@ namespace UmaSsCombine
 			if(args.Length <= 0) {
 				return;
 			}
-			
+			Mat[] mats = null;
 			try {
 				outputDir = Path.GetDirectoryName(args[0]);
 				if(args.Length == 1) {
@@ -49,7 +49,7 @@ namespace UmaSsCombine
 				}
 
 				// Configに従いソート
-				Mat[] mats = sortInputs(inputs);
+				mats = sortInputs(inputs);
 				if(mats == null) {
 					writeErrMsg("画像の並び替えに失敗しました");
 					return;
@@ -85,9 +85,10 @@ namespace UmaSsCombine
 				// 2枚目以降
 				for(int i = 1; i < mats.Length; i++) {
 					// 結合結果画像の下から、テンプレートマッチする高さ分切り抜き
+					using Mat croppedMat = retMat.Clone(new Rect(left, totalY - searchHeight, right - left, searchHeight));
 					// 結合対象とテンプレートマッチし、結合箇所を特定
-					var ret = TemplateMatch.Search(mats[i], retMat.Clone(new Rect(left, totalY - searchHeight, right - left, searchHeight)),
-						new Rect(left, 0, right - left, mats[i].Height), config.MinTemplateMatchScore);
+					var ret = TemplateMatch.Search(mats[i], croppedMat,
+						new Rect(left, 0, right - left, mats[i].Height), config.MinTemplateMatchScore); ;
 					if(ret == null) {
 						writeErrMsg($"{i + 1}番目の画像のテンプレートマッチに失敗しました");
 						return;
@@ -109,8 +110,8 @@ namespace UmaSsCombine
 						return;
 					}
 					// 結合
-					retMat[totalY, totalY + boundaryY - ret.Rect.Y + searchHeight, 0, width] =
-						mats[i].Clone(new Rect(0, ret.Rect.Y + searchHeight, width, boundaryY - ret.Rect.Y + searchHeight));
+					using Mat combineMat = mats[i].Clone(new Rect(0, ret.Rect.Y + searchHeight, width, boundaryY - ret.Rect.Y + searchHeight));
+					retMat[totalY, totalY + boundaryY - ret.Rect.Y + searchHeight, 0, width] = combineMat;
 					// 結合結果画像の実高さ更新
 					totalY += boundaryY - searchHeight - ret.Rect.Y;
 					Debug.WriteLine($"TotalY:{totalY}");
@@ -121,6 +122,15 @@ namespace UmaSsCombine
 			}
 			catch(Exception ex) {
 				writeErrMsg($"{ex.Message}{Environment.NewLine}{ex.StackTrace}");
+			}
+			finally {
+				if(mats != null) {
+					foreach(var m in mats) {
+						if(m != null) {
+							m.Dispose();
+						}
+					}
+				}
 			}
 		}
 
