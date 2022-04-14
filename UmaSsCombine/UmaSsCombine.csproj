@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <ApplicationIcon>nao.ico</ApplicationIcon>
-	  <Version>1.0.1</Version>
+	  <Version>1.0.2</Version>
 	  <Copyright>Copyright 2022 pochi</Copyright>
   </PropertyGroup>
 

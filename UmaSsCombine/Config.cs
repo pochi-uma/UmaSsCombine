@@ -19,7 +19,7 @@ namespace UmaSsCombine
 		public int BoundaryXPosRightGrayThresh { get; set; } = 215;
 		public double SearchHeightRatio { get; set; } = 0.04d;
 		public float MinTemplateMatchScore { get; set; } = 0.5f;
-		public SortTarget SortTarget { get; set; } = SortTarget.None;
+		public SortTarget SortTarget { get; set; } = SortTarget.FileName;
 		public SortOrder SortOrder { get; set; } = SortOrder.Ascending;
 		public static Config LoadConfig()
 		{
