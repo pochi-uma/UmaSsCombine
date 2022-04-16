@@ -21,6 +21,7 @@ namespace UmaSsCombine
 		public float MinTemplateMatchScore { get; set; } = 0.5f;
 		public SortTarget SortTarget { get; set; } = SortTarget.FileName;
 		public SortOrder SortOrder { get; set; } = SortOrder.Ascending;
+		public bool FactorOnly { get; set; } = true;
 		public static Config LoadConfig()
 		{
 			var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");

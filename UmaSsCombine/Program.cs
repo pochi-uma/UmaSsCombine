@@ -116,9 +116,22 @@ namespace UmaSsCombine
 					totalY += boundaryY - searchHeight - ret.Rect.Y;
 					Debug.WriteLine($"TotalY:{totalY}");
 				}
-				// 結合結果書き出し
+
 				var filePath = Path.Combine(outputDir, $"{DateTime.Now:yyyyMMddHHmmssfff}.png");
-				Cv2.ImWrite(filePath, retMat.Clone(new Rect(0, 0, width, totalY)));
+				using var trimedMat = retMat.Clone(new Rect(0, 0, width, totalY));
+				if(config.FactorOnly) {
+					using var factorMat = cropFactor(trimedMat);
+					if(factorMat == null) {
+						writeErrMsg($"マルチ解像度変換に失敗しました");
+						return;
+					}
+					// 結合結果書き出し
+					Cv2.ImWrite(filePath, factorMat);
+				}
+				else {
+					// 結合結果書き出し
+					Cv2.ImWrite(filePath, trimedMat);
+				}
 			}
 			catch(Exception ex) {
 				writeErrMsg($"{ex.Message}{Environment.NewLine}{ex.StackTrace}");
@@ -132,6 +145,79 @@ namespace UmaSsCombine
 					}
 				}
 			}
+		}
+
+		static Mat cropFactor(Mat m)
+		{
+			var rect = getMultiResolutionRect(m);
+			if(rect == Rect.Empty || rect.X + rect.Width > m.Width || rect.Y + rect.Height > m.Height) {
+				return null;
+			}
+			using var multiResolutionMat = m.Clone(new Rect(rect.X, 0, rect.Width, m.Height));
+			var scale = 700 / (double)multiResolutionMat.Width;
+			using var scaledMat = m.Resize(new Size(
+				(int)(multiResolutionMat.Width * scale), (int)(multiResolutionMat.Height * scale)), 0, 0);
+			using var factorBand = new Mat(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "images", "factor_band.png"), ImreadModes.AnyColor);
+			var matchRect = TemplateMatch.Search(scaledMat, factorBand, new Rect(0, 0, scaledMat.Width, (int)(scaledMat.Height * 0.7d)), 0.5f);
+			if(matchRect.MatchScore <= 0) {
+				return null;
+			}
+			var factorY = (int)(matchRect.Rect.Y / scale);
+			return m.Clone(new Rect(0, factorY, m.Width, m.Height - factorY));
+		}
+
+		static Rect getMultiResolutionRect(Mat m)
+		{
+			int matchCnt = 0;
+			int y = (int)(m.Width * 0.7);
+
+			try {
+				int startX = 0;
+				bool findStartX = false;
+				int endX = m.Width - 1;
+				bool findEndX = false;
+				matchCnt = 0;
+				int matchThresholdX = 8;
+				for(; startX < m.Width / 2; startX++) {
+					var pix = m.At<Vec3b>(y, startX);
+					if(pix[2] >= 245 && pix[1] >= 245 && pix[0] >= 245) {
+						matchCnt++;
+					}
+					else {
+						matchCnt = 0;
+					}
+					if(matchCnt >= matchThresholdX) {
+						startX = startX - matchThresholdX + 1;
+						findStartX = true;
+						break;
+					}
+				}
+				matchCnt = 0;
+				for(; endX > m.Width / 2; endX--) {
+					var pix = m.At<Vec3b>(y, endX);
+					if(pix[2] >= 245 && pix[1] >= 245 && pix[0] >= 245) {
+						matchCnt++;
+					}
+					else {
+						matchCnt = 0;
+					}
+					if(matchCnt >= matchThresholdX) {
+						endX = endX + matchThresholdX - 1;
+						findEndX = true;
+						break;
+					}
+				}
+				if(!findStartX || !findEndX) {
+					Debug.WriteLine($"X not found...");
+					return Rect.Empty;
+				}
+
+				return new Rect(startX, 0, endX - startX, 0);
+			}
+			catch(Exception ex) {
+				Debug.WriteLine($"{ex.Message} : {ex.StackTrace}");
+			}
+			return Rect.Empty;
 		}
 
 		/// <summary>

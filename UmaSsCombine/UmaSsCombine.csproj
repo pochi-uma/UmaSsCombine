@@ -5,7 +5,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <ApplicationIcon>nao.ico</ApplicationIcon>
-	  <Version>1.0.2</Version>
+	  <VersionPefix>1.0.2</VersionPefix>
+	  <VersionSuffix>factor-only</VersionSuffix>
 	  <Copyright>Copyright 2022 pochi</Copyright>
   </PropertyGroup>
 
@@ -21,9 +22,11 @@
     <None Update="config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="images\factor_band.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="OpenCvSharpExtern.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
 </Project>
