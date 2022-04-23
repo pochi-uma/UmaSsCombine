@@ -110,10 +110,10 @@ namespace UmaSsCombine
 						return;
 					}
 					// 結合
-					using Mat combineMat = mats[i].Clone(new Rect(0, ret.Rect.Y + searchHeight, width, boundaryY - ret.Rect.Y + searchHeight));
-					retMat[totalY, totalY + boundaryY - ret.Rect.Y + searchHeight, 0, width] = combineMat;
+					using Mat combineMat = mats[i].Clone(new Rect(0, ret.Rect.Y, width, boundaryY - ret.Rect.Y));
+					retMat[new Rect(0, totalY - searchHeight, width, combineMat.Height)] = combineMat;
 					// 結合結果画像の実高さ更新
-					totalY += boundaryY - searchHeight - ret.Rect.Y;
+					totalY += combineMat.Height - searchHeight;
 					Debug.WriteLine($"TotalY:{totalY}");
 				}
 				// 結合結果書き出し
