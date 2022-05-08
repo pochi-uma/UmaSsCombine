@@ -12,5 +12,7 @@
   "searchHeightRatio": 0.04,
   "minTemplateMatchScore": 0.5,
   "sortTarget": "fileName",
-  "sortOrder": "ascending"
+  "sortOrder": "ascending",
+  "deleteScrollBar": false,
+  "deleteSideMargin":  false
 }

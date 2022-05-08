@@ -1,31 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <ApplicationIcon>nao.ico</ApplicationIcon>
-	  <Version>1.0.3</Version>
-	  <VersionPefix>1.0.3</VersionPefix>
-	  <VersionSuffix>pre</VersionSuffix>
-	  <Copyright>Copyright 2022 pochi</Copyright>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<ApplicationIcon>nao.ico</ApplicationIcon>
+		<Version>1.0.4</Version>
+		<Copyright>Copyright 2022 pochi</Copyright>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Content Include="nao.ico" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="nao.ico" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="OpenCvSharp4" Version="4.5.5.20211231" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="OpenCvSharp4" Version="4.5.5.20211231" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="config.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="OpenCvSharpExtern.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="config.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="OpenCvSharpExtern.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>

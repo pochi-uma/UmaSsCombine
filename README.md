@@ -23,8 +23,8 @@ Run desktop appsのDownload x64
 - 結合したい複数の「継承タブ」画面のスクリーンショットをUmaSsCombine.exeにドラッグ&ドロップして下さい  
 結合元の画像を同じフォルダに結合した画像を出力します(ファイル名は「年月月日時分秒ミリ秒.png」)
 
-- 結合元画像の処理順
-・デフォルトはファイル名の昇順に処理を実行していきます  
+- 結合元画像の処理順  
+デフォルトはファイル名の昇順に処理を実行していきます  
 処理順を変更したい場合は、以下を参考にしてください 
     - 降順に変更したい  
 config.jsonの「sortOrder」の"ascending"を"descending"に変更してください  
@@ -34,6 +34,16 @@ config.jsonの「sortTarget」を"timeStamp"に変更してください
     - ドラッグ&ドロップした順に処理させたい  
 config.jsonの「sortTarget」を"none"に変更してください  
 (昇順・降順は指定できません)
+
+## オプション機能
+ - デフォルト結合画面
+ ![normal](readme_images/normal.png)
+ - 左右を切り落とし機能  
+ config.jsonの「deleteSideMargin」をtrueに変更してください
+ ![deleteSideMargin](readme_images/deleteSideMargin.png)
+ - スクロールバー消去機能  
+ config.jsonの「deleteScrollBar」をtrueに変更してください
+ ![deleteScrollBar](readme_images/deleteScrollBar.png) 
 
 ## 注意点
 - 結合元の画像はすべて同じ解像度にして下さい  
