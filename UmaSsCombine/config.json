@@ -1,18 +1,10 @@
 {
-  "boundaryYPosHeightRatio": 0.65,
-  "boundaryYPosHeightThresh": 247,
-  "boundaryXPosHeightRatio": 0.7,
-  "boundaryXPosLeftRatio": 0.03,
-  "boundaryXPosLeftMinThresh": 240,
-  "boundaryXPosLeftMaxThresh": 250,
-  "boundaryXPosLeftMargin": 9,
-  "boundaryXPosLeftFindCountRatio": 0.01,
-  "boundaryXPosRightThresh": 240,
-  "boundaryXPosRightGrayThresh": 215,
   "searchHeightRatio": 0.04,
   "minTemplateMatchScore": 0.5,
   "sortTarget": "fileName",
   "sortOrder": "ascending",
   "deleteScrollBar": false,
-  "deleteSideMargin":  false
+  "deleteSideMargin": false,
+  "factorOnly": false,
+  "layout": "vertical"
 }

@@ -7,22 +7,15 @@ namespace UmaSsCombine
 {
 	internal class Config
 	{
-		public double BoundaryYPosHeightRatio { get; set; } = 0.65d;
-		public int BoundaryYPosHeightThresh { get; set; } = 247;
-		public double BoundaryXPosHeightRatio { get; set; } = 0.7d;
-		public double BoundaryXPosLeftRatio { get; set; } = 0.03d;
-		public int BoundaryXPosLeftMinThresh { get; set; } = 240;
-		public int BoundaryXPosLeftMaxThresh { get; set; } = 250;
-		public int BoundaryXPosLeftMargin { get; set; } = 9;
-		public double BoundaryXPosLeftFindCountRatio { get; set; } = 0.01d;
-		public int BoundaryXPosRightThresh { get; set; } = 240;
-		public int BoundaryXPosRightGrayThresh { get; set; } = 215;
 		public double SearchHeightRatio { get; set; } = 0.04d;
 		public float MinTemplateMatchScore { get; set; } = 0.5f;
 		public SortTarget SortTarget { get; set; } = SortTarget.FileName;
 		public SortOrder SortOrder { get; set; } = SortOrder.Ascending;
 		public bool DeleteScrollBar { get; set; } = false;
 		public bool DeleteSideMargin { get; set; } = false;
+		public bool FactorOnly { get; set; } = false;
+		public Layout Layout { get; set; } = Layout.Vertical;
+
 		public static Config LoadConfig()
 		{
 			var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
@@ -61,5 +54,14 @@ namespace UmaSsCombine
 	{
 		Ascending,
 		Descending
+	}
+
+	internal enum Layout
+	{
+		Vertical,
+		Horizontal,
+		Pedigree,
+		SimpleVertical,
+		SimpleHorizontal,
 	}
 }
