@@ -21,10 +21,10 @@
 		<None Update="config.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="images\ball.png">
+		<None Update="images\ball.bin">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="images\tab.png">
+		<None Update="images\tab.bin">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="OpenCvSharpExtern.dll">

@@ -16,10 +16,8 @@ namespace UmaSsCombine
 
 		static ImgUtil()
 		{
-			ballMat = new Mat(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-				"images", "ball.png"), ImreadModes.AnyColor);
-			tabMat = new Mat(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-				"images", "tab.png"), ImreadModes.AnyColor);
+			ballMat = new Mat(13, 13, MatType.CV_8UC1, File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "images", "ball.bin")));
+			tabMat = new Mat(36, 586, MatType.CV_8UC1, File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "images", "tab.bin")));
 		}
 
 		public static Rect GetBorder(Mat m)
