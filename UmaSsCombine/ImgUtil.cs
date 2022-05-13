@@ -176,8 +176,6 @@ namespace UmaSsCombine
 		{
 			int totalWidth;
 			int totalHeight;
-			int avgHeight = 0;
-			int avgWidth = 0;
 			int x = 0;
 			int y = 0;
 			if(mats.Length <= 0) {
