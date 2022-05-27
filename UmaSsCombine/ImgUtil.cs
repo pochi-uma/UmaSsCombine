@@ -56,7 +56,7 @@ namespace UmaSsCombine
 			unsafe {
 				byte* b = inRange.DataPointer;
 				dic.Clear();
-				for(y = (int)(m.Height * 0.7); y < (int)(m.Height * 0.95); y++) {
+				for(y = (int)(m.Height * 0.71); y < (int)(m.Height * 0.95); y++) {
 					findWhite = false;
 					for(x = borderX + 3; x < (int)(m.Width - borderX - 3); x++) {
 						if(b[y * m.Width + x] == White) {
