@@ -15,6 +15,7 @@ namespace UmaSsCombine
 		public bool DeleteSideMargin { get; set; } = false;
 		public bool FactorOnly { get; set; } = false;
 		public Layout Layout { get; set; } = Layout.Vertical;
+		public int[] ClipRect { get; set; } = new int[] { 0, 0, 0, 0 };
 
 		public static Config LoadConfig()
 		{
@@ -63,5 +64,6 @@ namespace UmaSsCombine
 		Pedigree,
 		SimpleVertical,
 		SimpleHorizontal,
+		Clip,
 	}
 }

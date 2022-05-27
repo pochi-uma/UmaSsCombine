@@ -6,5 +6,11 @@
   "deleteScrollBar": false,
   "deleteSideMargin": false,
   "factorOnly": false,
-  "layout": "vertical"
+  "layout": "vertical",
+  "clipRect": [
+    0,
+    0,
+    0,
+    0
+  ]
 }

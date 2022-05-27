@@ -1,7 +1,6 @@
 ﻿using OpenCvSharp;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -27,7 +26,7 @@ namespace UmaSsCombine
 			try {
 				outputDir = Path.GetDirectoryName(args[0]);
 				var filePath = Path.Combine(outputDir, $"{DateTime.Now:yyyyMMddHHmmssfff}.png");
-				if(args.Length == 1) {
+				if(config.Layout != Layout.Clip && args.Length == 1) {
 					writeErrMsg("2つ以上の画像ファイルを指定してください");
 					return;
 				}
@@ -64,11 +63,34 @@ namespace UmaSsCombine
 
 				// 1枚目を基準画像とする
 				var width = mats[0].Width;
-				if(config.Layout == Layout.SimpleVertical || config.Layout == Layout.SimpleHorizontal) {
+				if(config.Layout == Layout.SimpleVertical
+					|| config.Layout == Layout.SimpleHorizontal) {
 					using Mat simpleMat = ImgUtil.CombineSimple(mats, config.Layout);
 					if(simpleMat != null) {
 						Cv2.ImWrite(filePath, simpleMat);
 					}
+					return;
+				}
+				else if(config.Layout == Layout.Clip) {
+					if(config.ClipRect == null || config.ClipRect.Length != 4) {
+						writeErrMsg("切り抜き用の座標が設定されていません");
+						return;
+					}
+					Rect rect = new Rect(config.ClipRect[0], config.ClipRect[1], config.ClipRect[2], config.ClipRect[3]);
+					if(rect.Width == 0 || rect.Height == 0) {
+						writeErrMsg("切り抜き用の幅または高さが0です");
+						return;
+					}
+					if(rect.X + rect.Width > mats[0].Width || rect.Y + rect.Height > mats[0].Height) {
+						writeErrMsg($"切り抜き用の座標指定に誤りがあります");
+						return;
+					}
+					string now = $"{DateTime.Now:yyyyMMddHHmmssfff}";
+					for(int i = 0; i < mats.Length; i++) {
+						using Mat m = mats[i].Clone(rect);
+						Cv2.ImWrite(Path.Combine(outputDir, $"{now}_{i + 1}.png"), m);
+					}
+
 					return;
 				}
 				var borderRect = ImgUtil.GetBorder(mats[0]);
