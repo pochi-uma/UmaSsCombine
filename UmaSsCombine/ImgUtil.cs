@@ -50,12 +50,10 @@ namespace UmaSsCombine
 			}
 			var borderX = dic.OrderByDescending(p => p.Value).First().Key;
 			var borderBottom = 0;
-			using Mat m2 = m.Clone(new Rect(borderX, 0, m.Width - borderX * 2, m.Height));
 
 			int borderWidth = m.Width - borderX * 2;
 			unsafe {
 				byte* b = inRange.DataPointer;
-				dic.Clear();
 				for(y = (int)(m.Height * 0.71); y < (int)(m.Height * 0.95); y++) {
 					findWhite = false;
 					for(x = borderX + 3; x < (int)(m.Width - borderX - 3); x++) {
@@ -67,6 +65,21 @@ namespace UmaSsCombine
 					if(!findWhite) {
 						borderBottom = y - 1;
 						break;
+					}
+				}
+				if(borderBottom == 0) {
+					for(y = (int)(m.Height * 0.71); y >= (int)(m.Height * 0.50); y--) {
+						findWhite = false;
+						for(x = borderX + 3; x < (int)(m.Width - borderX - 3); x++) {
+							if(b[y * m.Width + x] == White) {
+								findWhite = true;
+								break;
+							}
+						}
+						if(!findWhite) {
+							borderBottom = y - 2;
+							break;
+						}
 					}
 				}
 			}
